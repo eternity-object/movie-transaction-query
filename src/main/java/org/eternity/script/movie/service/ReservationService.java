@@ -4,36 +4,37 @@ import jakarta.transaction.Transactional;
 import org.eternity.script.generic.Money;
 import org.eternity.script.movie.domain.*;
 import org.eternity.script.movie.persistence.*;
+import org.eternity.script.movie.persistence.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ReservationService {
-    private ScreeningDAO screeningDAO;
-    private MovieDAO movieDAO;
-    private DiscountPolicyDAO discountPolicyDAO;
-    private DiscountConditionDAO discountConditionDAO;
-    private ReservationDAO reservationDAO;
+    private ScreeningRepository screeningRepository;
+    private MovieRepository movieRepository;
+    private DiscountPolicyRepository discountPolicyRepository;
+    private DiscountConditionRepository discountConditionRepository;
+    private ReservationRepository reservationRepository;
 
-    public ReservationService(ScreeningDAO screeningDAO,
-                              MovieDAO movieDAO,
-                              DiscountPolicyDAO discountPolicyDAO,
-                              DiscountConditionDAO discountConditionDAO,
-                              ReservationDAO reservationDAO) {
-        this.screeningDAO = screeningDAO;
-        this.movieDAO = movieDAO;
-        this.discountConditionDAO = discountConditionDAO;
-        this.discountPolicyDAO = discountPolicyDAO;
-        this.reservationDAO = reservationDAO;
+    public ReservationService(ScreeningRepository screeningRepository,
+                              MovieRepository movieRepository,
+                              DiscountPolicyRepository discountPolicyRepository,
+                              DiscountConditionRepository discountConditionRepository,
+                              ReservationRepository reservationRepository) {
+        this.screeningRepository = screeningRepository;
+        this.movieRepository = movieRepository;
+        this.discountConditionRepository = discountConditionRepository;
+        this.discountPolicyRepository = discountPolicyRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Transactional
     public Reservation reserveScreening(Long customerId, Long screeningId, Integer audienceCount) {
-        Screening screening = screeningDAO.selectScreening(screeningId);
-        Movie movie = movieDAO.selectMovie(screening.getMovieId());
-        DiscountPolicy policy = discountPolicyDAO.selectDiscountPolicy(movie.getId());
-        List<DiscountCondition> conditions = discountConditionDAO.selectDiscountConditions(policy.getId());
+        Screening screening = screeningRepository.findById(screeningId).get();
+        Movie movie = movieRepository.findById(screening.getMovieId()).get();
+        DiscountPolicy policy = discountPolicyRepository.findByMovieId(movie.getId());
+        List<DiscountCondition> conditions = discountConditionRepository.findByPolicyId(policy.getId());
 
         DiscountCondition condition = findDiscountCondition(screening, conditions);
 
@@ -45,7 +46,7 @@ public class ReservationService {
         }
 
         Reservation reservation = makeReservation(customerId, screeningId, audienceCount, fee);
-        reservationDAO.insert(reservation);
+        reservationRepository.save(reservation);
 
         return reservation;
     }
