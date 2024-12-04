@@ -54,8 +54,8 @@ public class ReservationService {
         for(DiscountCondition condition : conditions) {
             if (condition.isPeriodCondition()) {
                 if (screening.isPlayedIn(condition.getDayOfWeek(),
-                                         condition.getStartTime(),
-                                         condition.getEndTime())) {
+                        condition.getStartTime(),
+                        condition.getEndTime())) {
                     return condition;
                 }
             } else {
