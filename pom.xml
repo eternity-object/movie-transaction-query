@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.eternity</groupId>
-	<artifactId>movie-transaction-script-query</artifactId>
+	<artifactId>movie-transaction-query</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>movie-transaction-script</name>
 	<description>영화 예매 트랜잭션 스크립트 예제</description>
