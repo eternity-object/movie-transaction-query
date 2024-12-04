@@ -24,8 +24,8 @@ public class ReservationService {
                               ReservationRepository reservationRepository) {
         this.screeningRepository = screeningRepository;
         this.movieRepository = movieRepository;
-        this.discountConditionRepository = discountConditionRepository;
         this.discountPolicyRepository = discountPolicyRepository;
+        this.discountConditionRepository = discountConditionRepository;
         this.reservationRepository = reservationRepository;
     }
 
@@ -55,8 +55,8 @@ public class ReservationService {
         for(DiscountCondition condition : conditions) {
             if (condition.isPeriodCondition()) {
                 if (screening.isPlayedIn(condition.getDayOfWeek(),
-                                         condition.getStartTime(),
-                                         condition.getEndTime())) {
+                                        condition.getStartTime(),
+                                        condition.getEndTime())) {
                     return condition;
                 }
             } else {
