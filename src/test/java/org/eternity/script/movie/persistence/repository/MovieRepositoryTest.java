@@ -1,17 +1,22 @@
 package org.eternity.script.movie.persistence.repository;
 
 import jakarta.persistence.EntityManager;
+import org.eternity.script.JpaConfig;
 import org.eternity.script.generic.Money;
 import org.eternity.script.movie.domain.Movie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.filter.TypeExcludeFilters;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest(showSql = false)
+@DataJpaTest(showSql = false,
+            excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JpaConfig.class))
 public class MovieRepositoryTest {
     @Autowired
     private EntityManager em;
